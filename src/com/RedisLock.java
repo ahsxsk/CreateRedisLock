@@ -13,14 +13,17 @@ public class RedisLock {
      * 申请锁
      * @param jedis redis连接
      * @param lockName 锁名称
-     * @param timeout 超时时间,ms
+     * @param acquireTimeout 申请超时时间,ms
+     * @param lockTimeout 锁超时时间,s
      * @return
      */
-    public String acquireLock(Jedis jedis, String lockName, long timeout) {
+    public String acquireLock(Jedis jedis, String lockName, long acquireTimeout, int lockTimeout) {
         String identifier = UUID.randomUUID().toString(); // 锁随机标识符
-        long expired = System.currentTimeMillis() + timeout;
-        while (System.currentTimeMillis() < expired) {
-            if (jedis.setnx("lock" + lockName, identifier) == 1) { //尝试获取锁
+        long acquiresEnd = System.currentTimeMillis() + acquireTimeout;
+        lockName = "lock:" + lockName;
+        while (System.currentTimeMillis() < acquiresEnd) {
+            if (jedis.setnx(lockName, identifier) == 1) { //尝试获取锁
+                jedis.expire(lockName, lockTimeout);
                 return identifier;
             }
         }
@@ -50,8 +53,8 @@ public class RedisLock {
                 break;
             } catch (Exception e) { //其他客户端修改了锁
                 System.out.println("release failed");
+                return false;
             }
-            return false;
         }
         return false;
     }
