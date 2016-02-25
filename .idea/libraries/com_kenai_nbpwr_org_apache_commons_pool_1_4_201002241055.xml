@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.kenai.nbpwr:org-apache-commons-pool:1.4-201002241055" type="repository">
+    <properties maven-id="com.kenai.nbpwr:org-apache-commons-pool:1.4-201002241055" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/org-apache-commons-pool-1.4-201002241055.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-pool-1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
